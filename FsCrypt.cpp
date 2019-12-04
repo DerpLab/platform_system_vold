@@ -437,14 +437,6 @@ bool fscrypt_initialize_systemwide_keys() {
     if (!android::vold::writeStringToFile(device_ref.key_raw_ref, ref_filename)) return false;
     LOG(INFO) << "Wrote system DE key reference to:" << ref_filename;
 
-    KeyBuffer per_boot_key;
-    if (!android::vold::randomKey(&per_boot_key)) return false;
-    std::string per_boot_raw_ref;
-    if (!android::vold::installKey(per_boot_key, &per_boot_raw_ref)) return false;
-    std::string per_boot_ref_filename = std::string("/data") + fscrypt_key_per_boot_ref;
-    if (!android::vold::writeStringToFile(per_boot_raw_ref, per_boot_ref_filename)) return false;
-    LOG(INFO) << "Wrote per boot key reference to:" << per_boot_ref_filename;
-
     if (!android::vold::FsyncDirectory(device_key_dir)) return false;
     s_systemwide_keys_initialized = true;
     return true;
